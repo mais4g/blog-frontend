@@ -1,27 +1,43 @@
-.header {
-  background: #2563eb;
-  padding: 1rem;
+.mobileNavLink {
+  background: var(--gray-800);
+  color: var(--gray-300);
+  border-color: var(--gray-700);
 }
 
-.navList {
-  display: flex;
-  gap: 1rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.mobileNavLink:hover {
+  background: var(--primary-950);
+  color: var(--primary-400);
+  border-color: var(--primary-800);
 }
 
-.navList a,
-.logoutButton {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
+.mobileNavLink.active {
+  background: var(--primary-900);
+  color: var(--primary-300);
+  border-color: var(--primary-700);
 }
 
-.navList a:hover,
-.logoutButton:hover {
-  text-decoration: underline;
+.mobileLogoutButton {
+  background: var(--danger-950);
+  border-color: var(--danger-800);
+  color: var(--danger-400);
+}
+
+.mobileLogoutButton:hover {
+  background: var(--danger-900);
+  border-color: var(--danger-700);
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  .navLink {
+    border: 2px solid transparent;
+  }
+
+  .navLink:focus-visible {
+    border-color: var(--primary-500);
+  }
+
+  .logoutButton {
+    border-width: 2px;
+  }
 }

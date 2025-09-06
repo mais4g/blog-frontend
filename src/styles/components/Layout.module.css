@@ -2,10 +2,154 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: var(--gray-25);
+  position: relative;
 }
 
 .main {
   flex: 1;
-  padding: 1.5rem;
-  background: #f9fafb;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: calc(100vh - 80px);
+}
+
+.content {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-height: 600px;
+  position: relative;
+  border: 1px solid var(--gray-100);
+}
+
+/* Padrão de fundo decorativo */
+.main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, 
+    var(--primary-50) 0%, 
+    var(--primary-100) 50%, 
+    var(--primary-50) 100%
+  );
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Loading overlay */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(2px);
+}
+
+/* Error boundary */
+.errorBoundary {
+  padding: 3rem;
+  text-align: center;
+  color: var(--gray-600);
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--danger-500);
+}
+
+.errorTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .content {
+    border-radius: 0.75rem;
+  }
+  
+  .main::before {
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Modo escuro */
+@media (prefers-color-scheme: dark) {
+  .layout {
+    background: var(--gray-950);
+  }
+  
+  .content {
+    background: var(--gray-800);
+    color: var(--gray-100);
+    border-color: var(--gray-700);
+  }
+  
+  .main::before {
+    background: linear-gradient(135deg, 
+      var(--gray-800) 0%, 
+      var(--gray-700) 50%, 
+      var(--gray-800) 100%
+    );
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  .content {
+    border-width: 2px;
+    border-color: var(--gray-300);
+  }
 }
