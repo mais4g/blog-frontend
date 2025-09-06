@@ -1,24 +1,72 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PostsPage from "./pages/PostsPage";
-import AlbumsPage from "./pages/AlbumsPage";
-import AdminPage from "./pages/AdminPage"; 
 import PostDetailPage from "./pages/PostDetailPage";
+import AlbumsPage from "./pages/AlbumsPage";
 import AlbumDetailPage from "./pages/AlbumDetailPage";
+import AdminPage from "./pages/AdminPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rota pública */}
         <Route path="/" element={<LoginPage />} />
-        <Route path="/posts" element={<PostsPage />} />
-        <Route path="/albums" element={<AlbumsPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/posts/:id" element={<PostDetailPage />} />
-        <Route path="/albums/:id" element={<AlbumDetailPage />} />
+
+        {/* Rotas protegidas */}
+        <Route
+          path="/posts"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PostsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PostDetailPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/albums"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AlbumsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/albums/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AlbumDetailPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AdminPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;

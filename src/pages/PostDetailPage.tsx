@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api/api";
+import Loader from "../components/Loader";
 import styles from "../styles/pages/PostDetailPage.module.css";
 
 interface Post {
@@ -11,9 +12,8 @@ interface Post {
 
 interface Comment {
   id: number;
-  name: string;
-  email: string;
   body: string;
+  userId: number;
 }
 
 export default function PostDetailPage() {
@@ -22,9 +22,12 @@ export default function PostDetailPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
+      setError(null);
       try {
         const [postRes, commentsRes] = await Promise.all([
           api.get(`/posts/${id}`),
@@ -32,10 +35,12 @@ export default function PostDetailPage() {
         ]);
         setPost(postRes.data);
         setComments(commentsRes.data);
+      } catch {
+        setError("Erro ao carregar post ou comentários.");
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchData();
   }, [id]);
 
@@ -43,18 +48,24 @@ export default function PostDetailPage() {
     e.preventDefault();
     if (!newComment.trim()) return;
 
-    const res = await api.post("/comments", {
-      postId: id,
-      name: "Usuário Teste",
-      email: "teste@email.com",
-      body: newComment,
-    });
-
-    setComments((prev) => [...prev, res.data]);
-    setNewComment("");
+    setIsSubmitting(true);
+    try {
+      const res = await api.post("/comments", {
+        postId: id,
+        userId: 1, // simula usuário logado
+        body: newComment,
+      });
+      setComments((prev) => [...prev, res.data]);
+      setNewComment("");
+    } catch {
+      alert("Erro ao enviar comentário.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  if (loading) return <p className={styles.loading}>Carregando...</p>;
+  if (loading) return <Loader />;
+  if (error) return <p className={styles.error}>{error}</p>;
 
   return (
     <main className={styles.container}>
@@ -70,26 +81,25 @@ export default function PostDetailPage() {
         <ul className={styles.commentList}>
           {comments.map((c) => (
             <li key={c.id} className={styles.comment}>
-              <p className={styles.commentName}>{c.name}</p>
-              <p className={styles.commentEmail}>{c.email}</p>
               <p>{c.body}</p>
             </li>
           ))}
         </ul>
       </section>
 
-      <form onSubmit={handleAddComment} className={styles.form} aria-label="Adicionar comentário">
-        <label htmlFor="comment" className={styles.label}>Novo comentário</label>
+      <form
+        onSubmit={handleAddComment}
+        className={styles.form}
+        aria-label="Adicionar comentário"
+      >
         <textarea
-          id="comment"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="Escreva um comentário..."
           className={styles.textarea}
-          aria-required="true"
         />
-        <button type="submit" className={styles.button}>
-          Adicionar Comentário
+        <button type="submit" className={styles.button} disabled={isSubmitting}>
+          {isSubmitting ? "Enviando..." : "Adicionar Comentário"}
         </button>
       </form>
     </main>

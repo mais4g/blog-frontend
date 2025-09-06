@@ -1,69 +1,136 @@
-# React + TypeScript + Vite
+# 📑 Blog Frontend Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto foi desenvolvido como parte de uma **prova técnica para Desenvolvedor Frontend**.  
+O objetivo é consumir a API pública [JSONPlaceholder](https://jsonplaceholder.typicode.com/) e construir um **blog** com funcionalidades de autenticação simples, CRUD de usuários, listagem de posts, comentários e galeria de álbuns.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologias Utilizadas
 
-## Expanding the ESLint configuration
+- **React 18 + Vite** → framework moderno e rápido para desenvolvimento frontend.  
+- **TypeScript** → tipagem estática para maior segurança e produtividade.  
+- **Zustand** → gerenciamento de estado global simples e minimalista.  
+- **Axios** → consumo de API com suporte a interceptors e Promises.  
+- **React Hook Form + Yup** → formulários com validação avançada.  
+- **CSS Modules** → escopo local de estilos, evitando conflitos.  
+- **Mobile First + Acessibilidade (A11Y)** → design responsivo e inclusivo.  
+- **Vitest + React Testing Library** → testes unitários.  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📂 Estrutura do Projeto
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+ ├── api/              # Configuração do Axios
+ ├── components/       # Componentes reutilizáveis (Button, Loader, Header, etc.)
+ ├── pages/            # Páginas principais (Login, Posts, PostDetail, Albums, AlbumDetail, Admin)
+ ├── store/            # Zustand (auth store)
+ ├── styles/           # CSS Modules organizados por páginas e componentes
+ ├── tests/            # Testes unitários (Vitest + RTL)
+ ├── App.tsx           # Definição de rotas
+ └── main.tsx          # Ponto de entrada
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ⚙️ Instalação e Execução
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone o repositório
+```bash
+git clone https://github.com/seu-usuario/blog-frontend.git
+cd blog-frontend
 ```
+
+### 2. Instale as dependências
+```bash
+npm install
+```
+
+### 3. Execute em modo de desenvolvimento
+```bash
+npm run dev
+```
+
+Acesse em: [http://localhost:5173](http://localhost:5173)
+
+### 4. Build para produção
+```bash
+npm run build
+```
+
+### 5. Rodar testes unitários
+```bash
+npm run test
+```
+
+---
+
+## 🔑 Funcionalidades
+
+### 🔹 Autenticação
+- Tela de login simples (mockada com Zustand).  
+- Rotas protegidas: `/posts`, `/albums`, `/admin`.  
+- Logout funcional no Header.  
+
+### 🔹 Painel Administrativo
+- CRUD de usuários (listar, criar, editar, excluir).  
+- Validações avançadas com Yup.  
+- Tratamento de erros e feedback visual.  
+
+### 🔹 Postagens
+- Listagem de posts com paginação.  
+- Detalhes de post com comentários.  
+- Adicionar novo comentário (simulação com `userId: 1`).  
+- Loader e mensagens de erro.  
+
+### 🔹 Galeria de Álbuns
+- Listagem de álbuns.  
+- Exibição de fotos em grid responsivo.  
+- Links para abrir fotos em tamanho real.  
+
+---
+
+## 🧪 Testes
+
+### Unitários (Vitest + RTL)
+- `LoginPage.test.tsx`: valida renderização e fluxo de login.  
+- `AdminPage.test.tsx`: validações de formulário e criação de usuário.  
+
+### E2E (Cypress) *(opcional, removido do projeto final)*  
+- Fluxo de login.  
+- CRUD de usuários.  
+
+---
+
+## 🛠️ Decisões Técnicas
+
+- **React + Vite**: escolhido pela velocidade de build e simplicidade.  
+- **Zustand**: gerenciamento de estado minimalista, sem boilerplate.  
+- **CSS Modules**: escopo local de estilos, evitando conflitos.  
+- **Axios**: consumo de API mais simples que `fetch`, com suporte a interceptors.  
+- **React Hook Form + Yup**: melhor experiência para formulários com validação.  
+- **Vitest + RTL**: integração nativa com Vite, rápido e confiável.  
+
+---
+
+## 📌 Melhorias Futuras
+
+- Implementar **autenticação real** com JWT.  
+- Adicionar **dark mode**.  
+- Melhorar ainda mais a **acessibilidade (A11Y)**.  
+- Implementar **testes E2E** com Cypress ou Playwright.  
+- Deploy contínuo com CI/CD.  
+
+---
+
+## 🌍 Deploy
+
+🔗 A aplicação está disponível em:  
+👉 [add]*
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por Maisa Gomes ✨
