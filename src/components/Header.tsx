@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { LayoutDashboard, Newspaper, Image, UserCog, LogOut, Menu, X, Sparkles } from "lucide-react";
 import styles from "../styles/components/Header.module.css";
 
 export default function Header() {
@@ -15,44 +16,44 @@ export default function Header() {
   };
 
   const navItems = [
-    { path: "/posts", label: "Posts", icon: "📝" },
-    { path: "/albums", label: "Álbuns", icon: "🖼️" },
-    { path: "/admin", label: "Admin", icon: "⚙️" }
+    { path: "/posts", label: "Posts", icon: <Newspaper size={18} /> },
+    { path: "/albums", label: "Álbuns", icon: <Image size={18} /> },
+    { path: "/admin", label: "Admin", icon: <UserCog size={18} /> }
   ];
+
+  const NavLink = ({ path, label, icon }: { path: string, label: string, icon: React.ReactNode }) => (
+    <Link
+      to={path}
+      className={`${styles.navLink} ${location.pathname.startsWith(path) ? styles.active : ''}`}
+      aria-current={location.pathname.startsWith(path) ? 'page' : undefined}
+      onClick={() => setIsMenuOpen(false)}
+    >
+      {icon}
+      {label}
+    </Link>
+  );
 
   return (
     <header className={styles.header} role="banner">
       <div className={styles.container}>
-        <Link to="/posts" className={styles.logo} aria-label="Ir para página inicial">
-          <div className={styles.logoIcon}>✨</div>
-          <span className={styles.logoText}>Meu App</span>
+        <Link to="/posts" className={styles.logo} aria-label="Ir para a página de posts">
+          <div className={styles.logoIcon}>
+            <Sparkles size={20} />
+          </div>
+          <span className={styles.logoText}>BlogFrontend</span>
         </Link>
 
         <nav className={styles.nav} role="navigation" aria-label="Navegação principal">
           <ul className={styles.navList} role="list">
             {navItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={`${styles.navLink} ${location.pathname === item.path ? styles.active : ''}`}
-                  aria-current={location.pathname === item.path ? 'page' : undefined}
-                >
-                  <span aria-hidden="true">{item.icon}</span>
-                  {item.label}
-                </Link>
-              </li>
+              <li key={item.path}><NavLink {...item} /></li>
             ))}
           </ul>
         </nav>
 
         <div className={styles.userSection}>
-          <button
-            onClick={handleLogout}
-            className={styles.logoutButton}
-            aria-label="Sair da conta"
-            title="Sair"
-          >
-            <span aria-hidden="true">🚪</span>
+          <button onClick={handleLogout} className={styles.logoutButton} aria-label="Sair da conta">
+            <LogOut size={18} />
             <span className={styles.logoutText}>Sair</span>
           </button>
         </div>
@@ -61,40 +62,21 @@ export default function Header() {
           className={styles.mobileMenuButton}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-expanded={isMenuOpen}
-          aria-label="Menu mobile"
+          aria-label="Abrir menu de navegação"
           aria-controls="mobile-menu"
         >
-          <span className={styles.hamburger}></span>
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {isMenuOpen && (
         <div id="mobile-menu" className={styles.mobileMenu}>
-          <nav className={styles.mobileNav}>
+          <nav>
             <ul className={styles.mobileNavList} role="list">
               {navItems.map((item) => (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={`${styles.mobileNavLink} ${location.pathname === item.path ? styles.active : ''}`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <span aria-hidden="true">{item.icon}</span>
-                    {item.label}
-                  </Link>
-                </li>
+                <li key={item.path}><NavLink {...item} /></li>
               ))}
             </ul>
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsMenuOpen(false);
-              }}
-              className={styles.mobileLogoutButton}
-            >
-              <span aria-hidden="true">🚪</span>
-              Sair
-            </button>
           </nav>
         </div>
       )}

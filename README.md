@@ -124,13 +124,6 @@ npm run test
 
 ---
 
-## 🌍 Deploy
-
-🔗 A aplicação está disponível em:  
-👉 [add]*
-
----
-
 ## 👨‍💻 Autor
 
 Desenvolvido por Maisa Gomes ✨

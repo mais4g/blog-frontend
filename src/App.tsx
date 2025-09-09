@@ -12,60 +12,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rota pública */}
         <Route path="/" element={<LoginPage />} />
 
-        {/* Rotas protegidas */}
-        <Route
-          path="/posts"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <PostsPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/posts/:id"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <PostDetailPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/albums"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <AlbumsPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/albums/:id"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <AlbumDetailPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <AdminPage />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
+        {/* Rotas Protegidas dentro do Layout */}
+        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="/albums" element={<AlbumsPage />} />
+          <Route path="/albums/:id" element={<AlbumDetailPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

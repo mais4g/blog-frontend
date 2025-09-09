@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import { AtSign, Lock, LogIn, Sparkles } from "lucide-react";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
 import styles from "../styles/pages/LoginPage.module.css";
@@ -9,20 +10,14 @@ export default function LoginPage() {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: "", password: "" });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -31,18 +26,18 @@ export default function LoginPage() {
     let isValid = true;
 
     if (!formData.email) {
-      newErrors.email = "Email é obrigatório";
+      newErrors.email = "O e-mail é obrigatório";
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email inválido";
+      newErrors.email = "Formato de e-mail inválido";
       isValid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = "Senha é obrigatória";
+      newErrors.password = "A senha é obrigatória";
       isValid = false;
     } else if (formData.password.length < 6) {
-      newErrors.password = "Senha deve ter pelo menos 6 caracteres";
+      newErrors.password = "A senha deve ter no mínimo 6 caracteres";
       isValid = false;
     }
 
@@ -52,37 +47,32 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     setIsLoading(true);
-    
     setTimeout(() => {
       login();
       navigate("/posts");
     }, 1000);
   };
 
-  if (isLoading) return <Loader fullPage text="Autenticando..." />;
-
   return (
     <div className={styles.container}>
+      {isLoading && <Loader fullPage text="Autenticando..." />}
       <div className={styles.card}>
-        <div className={styles.cardHeader}>
+        <div className={styles.header}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>✨</div>
-            <h1 className={styles.logoText}>Meu App</h1>
+            <Sparkles size={32} />
           </div>
-          <h2 className={styles.title}>Bem-vindo de volta</h2>
-          <p className={styles.subtitle}>Entre com suas credenciais para continuar</p>
+          <h1 className={styles.title}>Bem-vindo de Volta</h1>
+          <p className={styles.subtitle}>Acesse sua conta para continuar.</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <div className={styles.fieldGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email
-            </label>
-            <div className={styles.inputWrapper}>
+            <label htmlFor="email" className={styles.label}>E-mail</label>
+            <div className={styles.inputContainer}>
+              <AtSign className={styles.inputIcon} size={18} aria-hidden="true" />
               <input
                 id="email"
                 name="email"
@@ -90,12 +80,11 @@ export default function LoginPage() {
                 placeholder="seu@email.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`${styles.input} ${errors.email ? styles.error : ''}`}
+                className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
                 aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'email-error' : undefined}
+                aria-describedby="email-error"
                 required
               />
-              <span className={styles.inputIcon} aria-hidden="true">📧</span>
             </div>
             {errors.email && (
               <p id="email-error" className={styles.errorMessage} role="alert">
@@ -105,10 +94,9 @@ export default function LoginPage() {
           </div>
 
           <div className={styles.fieldGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Senha
-            </label>
-            <div className={styles.inputWrapper}>
+            <label htmlFor="password" className={styles.label}>Senha</label>
+            <div className={styles.inputContainer}>
+              <Lock className={styles.inputIcon} size={18} aria-hidden="true" />
               <input
                 id="password"
                 name="password"
@@ -116,12 +104,11 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`${styles.input} ${errors.password ? styles.error : ''}`}
+                className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
                 aria-invalid={!!errors.password}
-                aria-describedby={errors.password ? 'password-error' : undefined}
+                aria-describedby="password-error"
                 required
               />
-              <span className={styles.inputIcon} aria-hidden="true">🔒</span>
             </div>
             {errors.password && (
               <p id="password-error" className={styles.errorMessage} role="alert">
@@ -130,23 +117,18 @@ export default function LoginPage() {
             )}
           </div>
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            className={styles.submitButton}
-            disabled={isLoading}
-          >
-            {isLoading ? "Entrando..." : "Entrar"}
+          <Button type="submit" variant="primary" size="lg" className={styles.button} loading={isLoading} disabled={isLoading}>
+            <LogIn size={18} />
+            Entrar
           </Button>
         </form>
 
-        <footer className={styles.cardFooter}>
+        <footer className={styles.footer}>
           <p className={styles.footerText}>
             Não tem uma conta?{" "}
-            <button className={styles.linkButton} type="button">
+            <a href="#" className={styles.footerLink}>
               Cadastre-se
-            </button>
+            </a>
           </p>
         </footer>
       </div>

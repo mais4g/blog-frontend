@@ -4,14 +4,11 @@ import styles from "../styles/components/Layout.module.css";
 
 export default function Layout() {
   return (
-    <div className={styles.layout} data-theme="auto">
+    <div className={styles.layout}>
       <Header />
-      <main className={styles.main} role="main">
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <Outlet />
-          </div>
-        </div>
+      <main className={styles.main}>
+        {/* O Outlet renderiza o componente da rota ativa aqui */}
+        <Outlet />
       </main>
     </div>
   );
